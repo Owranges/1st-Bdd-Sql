@@ -23,7 +23,7 @@ const saltRounds = 10;
           
              connection.query("INSERT INTO Client SET ?", object, function(err, result){
                 if(err) throw err;
-                console.log("aaa")
+                
                 res.send()
             })
         });
@@ -32,16 +32,26 @@ const saltRounds = 10;
     router.post('/sign-in', (req,res) => {
         let email = req.body.email
         let password = req.body.password
+        
         connection.query(`SELECT * FROM Client WHERE email = '${email}'`, (err,result,fields) => {
+            console.log(err);
+            console.log(result);
+            if(!result.length){
+                res.status(404).send("Ur email or password is Incorrect")
+            }else{
+                let hash = result[0].password
+                bcrypt.compare(password, hash).then(function(result){
+                    if(result === true){
+                      
+                        res.send( "you are authenticated")
+                    }else {
+                        
+                        res.send("Sorry, we don't know this user")
+                    }
+                })
+            }
             
-            let hash = result[0].password
-            bcrypt.compare(password, hash).then(function(result){
-                if(result == true){
-                    res.send( "you are authenticated")
-                }else {
-                    res.send("Sorry, we don't know this user")
-                }
-            })
+            
         })
     })    
 

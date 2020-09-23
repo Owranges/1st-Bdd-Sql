@@ -1,3 +1,0 @@
-let hello = ''
-let aie = ''
-
