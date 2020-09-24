@@ -3,6 +3,7 @@
     <form @submit="onSubmit" >
       <p v-if="reponse == 'hi'">It's time to register</p>
       <p v-else-if="reponse == 'good'" >You have registered go Sign-In now!</p>
+      <p v-else-if="reponse == 'already'" >This email already exist</p>
       <p v-else-if="reponse == 'bad'">Registration Failed</p>
 
       <b-form-group class="input"  label="Name:" >
@@ -63,6 +64,7 @@
           name: '',
           password: '',
         },
+       
       }
     },
     methods: {
@@ -79,19 +81,26 @@
       //   // Trick to reset/clear native browser form validation state
       // },
       registerUser(event){
-          console.log(this.form)
+          
           if(this.form.email == '' || this.form.name == '' || this.form.password == ''){
             this.notFull = 'empty'
           }else{
             this.axios.post("http://localhost:8000/sign-up", this.form).then((res)=> {
-            if(res.status == 200) {
+              
+              
+            if(res.data == "This email already exist"){
+              this.reponse = "already"
+            }
+            else if(res.status == 200) {
+
               this.reponse = "good"
               this.notFull = ''
             }
             })
             .catch(err => {
-            console.log(err);
-            this.reponse = "bad"
+              console.log(err);
+              if(err == 404)
+              this.reponse = "bad"
             });
           }
           

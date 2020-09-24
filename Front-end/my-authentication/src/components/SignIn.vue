@@ -1,5 +1,8 @@
 <template>
     <form @submit="onSubmit" @reset="onReset">
+           <p v-if="mistake == ''"></p>
+      <p v-else-if="mistake == 'failed'" >Your Email or Password is incorrect</p>
+  
 
       <b-form-group 
         description="We'll never share your email with anyone else."
@@ -39,6 +42,8 @@
           email: '',
           password: '',
         },
+        token: '',
+        mistake: ''
       }
     },
     methods: {
@@ -54,19 +59,26 @@
         // Trick to reset/clear native browser form validation state
       },
       checkUser(){
-        console.log(this.form);
+        
         this.axios.post('http://localhost:8000/sign-in', this.form).then((response)=> {
-            console.log("t'es trop baleze")
-            console.log(response);
-            if(response.data == "you are authenticated"){
-              this.$router.push('/dashboard')
-            }
-            })
-            .catch(err => {
-              console.log(err)
-              alert("Ur email or password isn't known")
-             
-            });
+          
+          if(response.data.auth == true){
+          this.token = response.data.token
+          
+          this.$store.dispatch("Token", response.data.token)
+          this.$router.push('/dashboard')
+          }else{
+            console.log("alex");
+          }
+      
+        })
+        .catch(err => {
+          
+          console.log(err)
+          this.mistake = "failed"
+          // alert("Ur email or password isn't known")
+          
+        });
       }
         
 
