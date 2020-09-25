@@ -6,6 +6,46 @@ let router = express.Router();
 const saltRounds = 10;
 // const connection = require('../database/database')
 
+    router.delete('/sign-out/:email&:password', (req,res) => {
+        let email = req.params.email;
+        let password = req.params.password;
+      
+      
+        connection.query(`SELECT * FROM Client WHERE email = '${email}'`, (err,result,fields) => {
+            
+            if(result.length){
+                let hash = result[0].password
+               
+                bcrypt.compare(password, hash).then(function(resultat){
+                    
+                    if(resultat == true){
+                        connection.query(`DELETE FROM Client WHERE email = '${email}'`, (err,result,fields) =>{
+                            
+                            if (err) throw err;
+                           
+                            res.status(200).send("Ur account has been deleted")
+                        })
+                        
+                        
+                    }else {
+                       
+                        res.status(400).send("Sorry, we don't know this user")
+                    }
+                })
+                
+                
+            } else{
+             console.log(err + 'else err');
+                res.status(400).send("Ur password or email is incorrect")
+            }
+            
+        })
+    
+})
+
+            
+     
+
 
     router.post('/sign-up',  (req,res) => {
 
@@ -42,10 +82,9 @@ const saltRounds = 10;
         let email = req.body.email
         let password = req.body.password
         
+        
         connection.query(`SELECT * FROM Client WHERE email = '${email}'`, (err,result,fields) => {
-            console.log(err);
-            console.log(result);
-
+           
             let token = jwt.sign({name : result[0].name, email: result[0].email}, result[0].name + result[0].email + Math.floor(Math.random() * 5 + 1), {expiresIn: 86400 // expires in 24 hours
             });
             if(!result.length){
