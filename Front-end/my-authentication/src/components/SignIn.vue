@@ -1,5 +1,5 @@
 <template>
-    <form @submit="onSubmit" @reset="onReset">
+    <form @submit="onSubmit">
            <p v-if="mistake == ''"></p>
       <p v-else-if="mistake == 'failed'" >Your Email or Password is incorrect</p>
   
@@ -14,6 +14,7 @@
           type="email"
           required
           placeholder="Enter email"
+          v-on:keyup='keymonitor'
         ></b-form-input>
        </b-form-group>
       </b-form-group>
@@ -23,8 +24,8 @@
           id="input-3"
           v-model="form.password"
           placeholder="Enter your secret password"
-          
           required
+          v-on:keyup='keymonitor'
         ></b-form-input>
       </b-form-group>
       <b-button type="submit" variant="primary" @click="checkUser">Sign-In</b-button>
@@ -51,12 +52,20 @@
         evt.preventDefault()
         // alert(JSON.stringify(this.form))
       },
-      onReset(evt) {
-        evt.preventDefault()
-        // Reset our form values
-        this.form.email = ''
-        this.form.password = ''
-        // Trick to reset/clear native browser form validation state
+      // onReset(evt) {
+      //   evt.preventDefault()
+      //   // Reset our form values
+      //   this.form.email = ''
+      //   this.form.password = ''
+      //   // Trick to reset/clear native browser form validation state
+      // },
+      keymonitor: function(event) {
+      console.log(event.key);
+      
+      if (event.key == "Enter") {
+        this.checkUser(event);
+      }else if(event.key == onclick) 
+        this.checkUser()
       },
       checkUser(){
         
@@ -66,9 +75,12 @@
           this.token = response.data.token
           
           this.$store.dispatch("Token", response.data.token)
-          this.$router.push('/dashboard')
+          if (this.$route.path !== '/dashboard'){
+            this.$router.push('/dashboard')
+          } 
           }else{
-            console.log("alex");
+            console.log("failed");
+            this.mistake = "failed"
           }
       
         })

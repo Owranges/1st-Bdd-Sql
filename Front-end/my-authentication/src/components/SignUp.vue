@@ -13,6 +13,8 @@
           v-model="form.name"
           required
           placeholder="Enter name"
+          v-on:keyup='keymonitor'
+          
         ></b-form-input>
       </b-form-group>
 
@@ -26,6 +28,7 @@
           type="email"
           required
           placeholder="Enter email"
+          v-on:keyup='keymonitor'
         ></b-form-input>
        </b-form-group>
       </b-form-group>
@@ -36,12 +39,10 @@
           id="input-3"
           v-model="form.password"
           placeholder="Enter your secret password"
-          
           required
+          v-on:keyup='keymonitor'
         ></b-form-input>
       </b-form-group>
-
-    
 
       <b-button type="submit" variant="primary" @click="registerUser">Sign-Up</b-button>
       
@@ -72,6 +73,14 @@
         evt.preventDefault()
         // alert(JSON.stringify(this.form))
       },
+      keymonitor: function(event) {
+      console.log(event.key);
+      event.preventDefault()
+      if (event.key == "Enter") {
+        this.registerUser(event);
+      }else if(event.key == onclick) 
+        this.registerUser()
+    },
       // onReset(evt) {
       //   evt.preventDefault()
       //   // Reset our form values
@@ -92,7 +101,9 @@
               this.reponse = "already"
             }
             else if(res.status == 200) {
-
+              this.form.email = ''
+              this.form.name = ''
+              this.form.password = ''
               this.reponse = "good"
               this.notFull = ''
             }

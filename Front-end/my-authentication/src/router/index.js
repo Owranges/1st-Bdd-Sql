@@ -37,14 +37,18 @@ router.beforeEach((to,from,next) => {
   // console.log(store.state.tokens);
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   console.log(requiresAuth);
-
-  if(requiresAuth == true && store.state.tokens){
-    next()
-  }else if (requiresAuth && store.state.tokens == false) {
-    next('/')
+  if(to.matched.some(record => record.meta.requiresAuth)){
+    if(store.state.tokens){
+      next()
+    }else if (store.state.tokens == false) {
+      next('/')
+    }else{
+      next()
+    }
   }else{
     next()
   }
+  
   
 }) 
 
