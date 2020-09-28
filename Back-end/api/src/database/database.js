@@ -1,18 +1,18 @@
-const mysql = require('mysql');
+const mysql = require("mysql");
 
 const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'myfirstbdd'
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "client",
 });
 
-connection.connect(function(err) {
-    if (err) {
-      console.error('error connecting: ' + err);
-      return;
-    }
-    console.log('connected as id ' + connection.threadId);
-  });
+connection.connect(function (err) {
+  if (err) {
+    console.error("error connecting: " + err);
+    return;
+  }
+  console.log("connected as id " + connection.threadId);
+});
 
 module.exports = connection;

@@ -1,10 +1,10 @@
 <template>
   <form @submit="onSubmit">
-    <p v-if="reponse == 'hi'">It's time to register</p>
+    <!-- <p v-if="reponse == 'hi'">It's time to register</p>
     <p v-else-if="reponse == 'good'">You have registered go Sign-In now!</p>
     <p v-else-if="reponse == 'already'">This email already exist</p>
-    <p v-else-if="reponse == 'bad'">Registration Failed</p>
-
+    <p v-else-if="reponse == 'bad'">Registration Failed</p> -->
+    <p>{{ client }}</p>
     <b-form-group
       class="input"
       label="Name:"
@@ -40,21 +40,6 @@
       </b-form-group>
     </b-form-group>
 
-    <b-form-group class="input" label="Password:">
-      <b-form-input
-        id="input-3"
-        v-model="$v.password.$model"
-        placeholder="Enter your secret password"
-        required
-        v-on:keyup="keymonitor"
-      ></b-form-input>
-      <div class="error" v-if="!$v.password.required">password is required</div>
-      <div class="error" v-if="!$v.password.minLength">
-        password must have at least
-        {{ $v.password.$params.minLength.min }} letters.
-      </div>
-    </b-form-group>
-
     <b-button
       type="submit"
       variant="primary"
@@ -70,16 +55,15 @@
 <script>
 import { required, minLength, between } from "vuelidate/lib/validators";
 export default {
-  name: "SignUp",
+  name: "AddContactForm",
   data() {
     return {
       reponse: "hi",
       notFull: "",
-
       email: "",
       name: "",
-      password: "",
       submitStatus: "",
+      client: this.$store.state.tokenMail,
     };
   },
   validations: {
@@ -90,10 +74,6 @@ export default {
     email: {
       required,
       minLength: minLength(5),
-    },
-    password: {
-      required,
-      minLength: minLength(6),
     },
   },
   methods: {
@@ -122,14 +102,15 @@ export default {
     },
 
     registerUser(event) {
-      if (this.email == "" || this.name == "" || this.password == "") {
+      if (this.email == "" || this.name == "") {
         this.notFull = "empty";
       } else {
+        console.log(this.client);
         this.axios
-          .post("http://localhost:8000/sign-up", {
+          .post("http://localhost:8000/addcontacts", {
             email: this.email,
             name: this.name,
-            password: this.password,
+            client: this.client,
           })
           .then((res) => {
             if (res.data == "This email already exist") {
@@ -137,7 +118,6 @@ export default {
             } else if (res.status == 200) {
               this.email = "";
               this.name = "";
-              this.password = "";
               this.reponse = "good";
               this.submitStatus = "OK";
               this.notFull = "";
@@ -152,19 +132,3 @@ export default {
   },
 };
 </script>
-
-<style>
-form {
-  text-align: left;
-}
-.input {
-  width: 50%;
-  justify-content: center;
-}
-.form-group--error {
-  color: red;
-}
-.error {
-  color: red;
-}
-</style>

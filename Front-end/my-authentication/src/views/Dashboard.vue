@@ -1,37 +1,25 @@
 <template>
-<div>
+  <div>
+    <header><ConnectedHeader /></header>
     <h1>This is Dashboard page</h1>
-    <hr>
+    <hr />
     <p>Welcome to you connected user!</p>
-    <b-button type="submit" variant="primary" @click="registerUser">Sign-Out</b-button>
-    <DeleteForm/>
-    
-</div>
-    
+    <b-tabs content-class="mt-3">
+      <b-tab title="AddContact" active><AddContactForm /></b-tab>
+      <b-tab title="Contacts"><ContactList /></b-tab>
+      <b-tab title="DeleteUrAccount"><DeleteForm /></b-tab>
+    </b-tabs>
+  </div>
 </template>
 
 <script>
-import DeleteForm from '../components/DeleteForm'
+import AddContactForm from "../components/AddContactForm";
+import ContactList from "../components/ContactList";
+import DeleteForm from "../components/DeleteForm";
+import ConnectedHeader from "../components/ConnectedHeader";
 
 export default {
-    name : 'Dashboard',
-    components : {DeleteForm},
-    data() {
-        return{
-            token : this.$store.state.token,
-            
-        }
-    },
-    methods :{
-        registerUser(){
-            
-            this.$store.dispatch("DeleteToken")
-            this.token = ''
-            this.$router.push('/')
-        },
-        
-        
-    }
-    
-}
+  name: "Dashboard",
+  components: { DeleteForm, ConnectedHeader, AddContactForm, ContactList },
+};
 </script>
