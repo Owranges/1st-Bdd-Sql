@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>ContactList</p>
+    <p></p>
     <button @click="ListOfContacts">Add</button>
   </div>
 </template>
@@ -10,16 +11,19 @@ export default {
   name: "ContactList",
   data() {
     return {
-      email: this.$store.state.tokenMail,
+      id: this.$store.state.tokenIDs,
     };
   },
+  // beforemounted() {
+  //   this.ListOfContacts();
+  // },
   methods: {
     ListOfContacts() {
-      console.log(this.email);
+      console.log(this.id);
       this.axios
-        .get(`http://localhost:8000/get-contacts/'${this.email}'`)
+        .get(`http://localhost:8000/get-contacts/${this.id}`)
         .then((response) => {
-          console.log(response + "aaa");
+          console.log(JSON.stringify(response + "aaa"));
         })
         .catch((err) => {
           console.log(err);

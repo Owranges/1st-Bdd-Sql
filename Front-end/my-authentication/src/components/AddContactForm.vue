@@ -63,7 +63,8 @@ export default {
       email: "",
       name: "",
       submitStatus: "",
-      client: this.$store.state.tokenMail,
+      id: this.$store.state.tokenIDs,
+      client: this.$store.state.tokenNames,
     };
   },
   validations: {
@@ -110,7 +111,7 @@ export default {
           .post("http://localhost:8000/addcontacts", {
             email: this.email,
             name: this.name,
-            client: this.client,
+            user_affiliate: this.id,
           })
           .then((res) => {
             if (res.data == "This email already exist") {

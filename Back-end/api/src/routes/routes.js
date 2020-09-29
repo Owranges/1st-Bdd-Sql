@@ -110,29 +110,17 @@ router.post("/sign-in", (req, res) => {
 //
 //
 //
-router.post("/addcontact", (req, res) => {
-  let client = req.body.client;
-  let email = req.body.email;
-  let name = req.body.name;
+router.post("/addcontacts", (req, res) => {
   connection.query(
-    `SELECT * FROM Client WHERE email = '${client}'`,
-    (err, result, field) => {
-      if (!result.length) {
-        res.status(404).send("Ur email or password is Incorrect");
-      } else {
-        connection.query(
-          "INSERT INTO contacts SET ?",
-          {
-            name: name,
-            email: email,
-            user_affiliate: result[0].id,
-          },
-          function (err, result) {
-            if (err) throw err;
-            res.send("hi");
-          }
-        );
-      }
+    "INSERT INTO contacts SET ?",
+    {
+      name: req.body.name,
+      email: req.body.email,
+      user_affiliate: req.body.user_affiliate,
+    },
+    function (err, result) {
+      if (err) throw err;
+      res.send("hi");
     }
   );
 });
@@ -147,7 +135,7 @@ router.get("/get-contacts/:id", (req, res) => {
     (err, results, fields) => {
       if (err) throw err;
       console.log(results);
-      console.log("merde");
+      // console.log(JSON.parse(JSON.stringify({ results })));
       res.send(results);
     }
   );
