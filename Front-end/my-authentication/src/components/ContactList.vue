@@ -18,6 +18,7 @@ export default {
     return {
       contactTab: this.$store.state.contacts,
       id: this.$store.state.tokenIDs,
+      token: this.$store.state.tokens,
     };
   },
   beforeMount() {
@@ -30,11 +31,18 @@ export default {
   },
   methods: {
     ListOfContacts() {
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: this.token,
+      };
       console.log(this.id);
       console.log("im in listofcontact");
       this.axios
-        .get(`http://localhost:8000/get-contacts/${this.id}`)
+        .get(`http://localhost:8000/get-contacts/${this.id}`, {
+          headers: headers,
+        })
         .then((response) => {
+          console.log(response);
           console.log(response);
           if (response.status == 200) {
             response.data.forEach((element) => {

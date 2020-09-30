@@ -18,9 +18,9 @@ export default new Vuex.Store({
   getters: {
     Contactes: (state) => (contact) => {
       if (state.contacts !== contact) {
-        return (state.contacts = contact);
+        return state.contacts;
       }
-      return state.contacts;
+      return contact;
     },
   },
   mutations: {
@@ -29,6 +29,9 @@ export default new Vuex.Store({
     },
     DELETE_TOKEN: (state) => {
       state.tokens = false;
+      state.tokenNames = false;
+      state.tokenIDs = false;
+      state.tokenMail = false;
     },
     TOKEN_INFO: (state, tokenInfo) => {
       state.tokenNames = tokenInfo.Tokename;
@@ -40,6 +43,10 @@ export default new Vuex.Store({
       console.log(contact);
     },
     GET_CONTACTS: (state, contact) => {
+      console.log("fils de pute");
+      state.contacts = [];
+      state.contacts = false;
+      state.contacts = null;
       state.contacts = contact;
     },
   },

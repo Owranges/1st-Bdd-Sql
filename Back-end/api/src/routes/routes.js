@@ -49,7 +49,7 @@ router.delete("/sign-out/:email&:password", (req, res) => {
   );
 });
 
-router.post("/sign-up", (req, res, next) => {
+router.post("/sign-up", (req, res) => {
   let name = req.body.name;
   let email = req.body.email;
   let password = req.body.password;
@@ -92,7 +92,7 @@ router.post("/sign-in", (req, res) => {
     (err, result, fields) => {
       let token = jwt.sign(
         { name: result[0].name, email: result[0].email, id: result[0].id },
-        result[0].name + result[0].email + Math.floor(Math.random() * 5 + 1),
+        "result[0].name + result[0].email + Math.floor(Math.random() * 5 + 1)",
         {
           expiresIn: 86400, // expires in 24 hours
         }
@@ -125,13 +125,22 @@ router.post("/sign-in", (req, res) => {
 //
 //
 //
+
+router.use("/addcontacts", (req, res, next) => {
+  let token = req.headers.authorization;
+  jwt.verify(
+    token,
+    "result[0].name + result[0].email + Math.floor(Math.random() * 5 + 1)",
+    (err, decoded) => {
+      if (err) res.status(403).send("Token is invalid");
+      else if (decoded) {
+        next();
+      }
+    }
+  );
+});
+
 router.post("/addcontacts", (req, res) => {
-  // connection.query(
-  //   `SELECT * FROM contacts WHERE email = '${req.body.email}', user_affiliate = '${req.body.user_affiliate}`,
-  //   (err, result, fields) => {
-  //     if (result.length) {
-  //       res.send("This email already exist");
-  //     } else {
   connection.query(
     "INSERT INTO contacts SET ?",
     {
@@ -141,15 +150,27 @@ router.post("/addcontacts", (req, res) => {
     },
     (err, results, fields) => {
       if (err) throw err;
-      console.log(err);
-      console.log(fields);
-      console.log(results);
-      res.send(results);
+
+      res.send(res + results);
     }
   );
   //     }
   //   }
   // );
+});
+
+router.use("/get-contacts/:id", (req, res, next) => {
+  let token = req.headers.authorization;
+  jwt.verify(
+    token,
+    "result[0].name + result[0].email + Math.floor(Math.random() * 5 + 1)",
+    (err, decoded) => {
+      if (err) res.status(403).send("Token is invalid");
+      else if (decoded) {
+        next();
+      }
+    }
+  );
 });
 
 router.get("/get-contacts/:id", (req, res) => {

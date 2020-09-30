@@ -109,16 +109,22 @@ export default {
         console.log(this.client);
         // let decoded = jwt.decode(this.token);
         // console.log(decoded);
-        // const headers = {
-        //   "Content-Type": "application/json",
-        //   Authorization: decoded,
-        // };
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: this.token,
+        };
         this.axios
-          .post("http://localhost:8000/addcontacts", {
-            email: this.email,
-            name: this.name,
-            user_affiliate: this.id,
-          })
+          .post(
+            "http://localhost:8000/addcontacts",
+            {
+              email: this.email,
+              name: this.name,
+              user_affiliate: this.id,
+            },
+            {
+              headers: headers,
+            }
+          )
           .then((res) => {
             if (res.data == "This email already exist") {
               this.reponse = "already";
@@ -134,6 +140,8 @@ export default {
               this.reponse = "good";
               this.submitStatus = "OK";
               this.notFull = "";
+            } else {
+              this.submitStatus = "OK";
             }
           })
           .catch((err) => {
