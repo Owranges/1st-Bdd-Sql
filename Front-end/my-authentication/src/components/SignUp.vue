@@ -97,8 +97,12 @@ export default {
     },
   },
   methods: {
+    // myFunctionHere(){
+    //   console.log("dirty");
+    // },
     onSubmit(evt) {
       evt.preventDefault();
+
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
@@ -108,7 +112,6 @@ export default {
       }
     },
     keymonitor: function (event) {
-      console.log(event.key);
       event.preventDefault();
       this.$v.$touch();
       if (event.key == "Enter") {
@@ -141,6 +144,8 @@ export default {
               this.reponse = "good";
               this.submitStatus = "OK";
               this.notFull = "";
+            } else {
+              this.submitStatus = "OK";
             }
           })
           .catch((err) => {

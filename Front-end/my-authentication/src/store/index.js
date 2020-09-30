@@ -13,6 +13,15 @@ export default new Vuex.Store({
     tokenNames: false,
     tokenIDs: false,
     tokenMail: false,
+    contacts: [],
+  },
+  getters: {
+    Contactes: (state) => (contact) => {
+      if (state.contacts !== contact) {
+        return (state.contacts = contact);
+      }
+      return state.contacts;
+    },
   },
   mutations: {
     MUTE_TOKEN: (state, theToken) => {
@@ -25,7 +34,13 @@ export default new Vuex.Store({
       state.tokenNames = tokenInfo.Tokename;
       state.tokenIDs = tokenInfo.Tokeid;
       state.tokenMail = tokenInfo.Tokenemail;
-      console.log(state.tokenIDs);
+    },
+    NEW_CONTACTS: (state, contact) => {
+      state.contacts.push(contact);
+      console.log(contact);
+    },
+    GET_CONTACTS: (state, contact) => {
+      state.contacts = contact;
     },
   },
   actions: {
@@ -37,7 +52,12 @@ export default new Vuex.Store({
     },
     tokenName(context, tokenName) {
       context.commit("TOKEN_INFO", tokenName);
-      console.log(tokenName);
+    },
+    NewContact(context, contact) {
+      context.commit("NEW_CONTACTS", contact);
+    },
+    GetContacts(context, contact) {
+      context.commit("GET_CONTACTS", contact);
     },
   },
 });

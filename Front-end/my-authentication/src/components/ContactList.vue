@@ -1,8 +1,13 @@
 <template>
   <div>
     <p>ContactList</p>
-    <p></p>
-    <button @click="ListOfContacts">Add</button>
+    <ul>
+      <li v-for="contact in Contactes" v-bind:key="contact.email">
+        name:{{ contact.name }} <br />
+        email:{{ contact.email }}
+      </li>
+    </ul>
+    <button>Add</button>
   </div>
 </template>
 
@@ -11,19 +16,31 @@ export default {
   name: "ContactList",
   data() {
     return {
+      contactTab: this.$store.state.contacts,
       id: this.$store.state.tokenIDs,
     };
   },
-  // beforemounted() {
-  //   this.ListOfContacts();
-  // },
+  beforeMount() {
+    this.ListOfContacts();
+  },
+  computed: {
+    Contactes() {
+      return this.$store.getters.Contactes(this.contactTab);
+    },
+  },
   methods: {
     ListOfContacts() {
       console.log(this.id);
+      console.log("im in listofcontact");
       this.axios
         .get(`http://localhost:8000/get-contacts/${this.id}`)
         .then((response) => {
-          console.log(JSON.stringify(response + "aaa"));
+          console.log(response);
+          if (response.status == 200) {
+            response.data.forEach((element) => {
+              this.$store.dispatch("GetContacts", response.data);
+            });
+          }
         })
         .catch((err) => {
           console.log(err);

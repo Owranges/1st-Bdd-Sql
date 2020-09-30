@@ -21,5 +21,8 @@ import ConnectedHeader from "../components/ConnectedHeader";
 export default {
   name: "Dashboard",
   components: { DeleteForm, ConnectedHeader, AddContactForm, ContactList },
+  date() {
+    return {};
+  },
 };
 </script>

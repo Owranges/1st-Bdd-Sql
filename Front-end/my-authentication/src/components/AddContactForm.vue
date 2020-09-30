@@ -65,6 +65,7 @@ export default {
       submitStatus: "",
       id: this.$store.state.tokenIDs,
       client: this.$store.state.tokenNames,
+      token: this.$store.state.tokens,
     };
   },
   validations: {
@@ -89,7 +90,6 @@ export default {
       }
     },
     keymonitor: function (event) {
-      console.log(event.key);
       event.preventDefault();
       this.$v.$touch();
       if (event.key == "Enter") {
@@ -107,6 +107,12 @@ export default {
         this.notFull = "empty";
       } else {
         console.log(this.client);
+        // let decoded = jwt.decode(this.token);
+        // console.log(decoded);
+        // const headers = {
+        //   "Content-Type": "application/json",
+        //   Authorization: decoded,
+        // };
         this.axios
           .post("http://localhost:8000/addcontacts", {
             email: this.email,
@@ -116,7 +122,13 @@ export default {
           .then((res) => {
             if (res.data == "This email already exist") {
               this.reponse = "already";
+              this.submitStatus = "OK";
             } else if (res.status == 200) {
+              this.$store.dispatch("NewContact", {
+                email: this.email,
+                name: this.name,
+                user_affiliate: this.id,
+              });
               this.email = "";
               this.name = "";
               this.reponse = "good";

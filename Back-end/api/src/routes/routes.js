@@ -5,6 +5,21 @@ const jwt = require("jsonwebtoken");
 let router = express.Router();
 const saltRounds = 10;
 
+router.use("/sign-up", (req, response, next) => {
+  connection.query(
+    `SELECT * FROM Client WHERE name = '${req.body.name}'`,
+    (err, res) => {
+      console.log(res);
+      console.log(res.length);
+      if (res.length > 0) {
+        response.status(201).send("This USER NAME already exist");
+      } else {
+        next();
+      }
+    }
+  );
+});
+
 router.delete("/sign-out/:email&:password", (req, res) => {
   let email = req.params.email;
   let password = req.params.password;
@@ -34,7 +49,7 @@ router.delete("/sign-out/:email&:password", (req, res) => {
   );
 });
 
-router.post("/sign-up", (req, res) => {
+router.post("/sign-up", (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
   let password = req.body.password;
@@ -111,6 +126,12 @@ router.post("/sign-in", (req, res) => {
 //
 //
 router.post("/addcontacts", (req, res) => {
+  // connection.query(
+  //   `SELECT * FROM contacts WHERE email = '${req.body.email}', user_affiliate = '${req.body.user_affiliate}`,
+  //   (err, result, fields) => {
+  //     if (result.length) {
+  //       res.send("This email already exist");
+  //     } else {
   connection.query(
     "INSERT INTO contacts SET ?",
     {
@@ -118,20 +139,27 @@ router.post("/addcontacts", (req, res) => {
       email: req.body.email,
       user_affiliate: req.body.user_affiliate,
     },
-    function (err, result) {
+    (err, results, fields) => {
       if (err) throw err;
-      res.send("hi");
+      console.log(err);
+      console.log(fields);
+      console.log(results);
+      res.send(results);
     }
   );
+  //     }
+  //   }
+  // );
 });
 
 router.get("/get-contacts/:id", (req, res) => {
   let x = req.params.id;
   console.log(x);
   connection.query(
-    `SELECT * FROM client INNER JOIN contacts ON client.id = contacts.user_affiliate WHERE client.id = ${connection.escape(
-      x
-    )}`,
+    `SELECT contacts.name,contacts.email,contacts.user_affiliate,contacts.id
+     FROM client INNER JOIN contacts ON client.id = contacts.user_affiliate WHERE client.id = ${connection.escape(
+       x
+     )} `,
     (err, results, fields) => {
       if (err) throw err;
       console.log(results);
