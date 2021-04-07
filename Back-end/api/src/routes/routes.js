@@ -86,7 +86,6 @@ router.post("/sign-up", (req, res) => {
 router.post("/sign-in", (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
-
   connection.query(
     `SELECT * FROM Client WHERE email = '${email}'`,
     (err, result, fields) => {
@@ -100,9 +99,11 @@ router.post("/sign-in", (req, res) => {
       if (!result.length) {
         res.status(404).send("Ur email or password is Incorrect");
       } else {
-        let hash = result[0].password;
-        bcrypt.compare(password, hash).then(function (result) {
-          if (result === true) {
+        // let hash = ;
+        // console.log(hash);
+        bcrypt.compare(password, result[0].password).then(function (results) {
+          console.log(results);
+          if (results) {
             res.status(200).send({ auth: true, token: token });
           } else {
             res.status(400).send("Sorry, we don't know this user");
@@ -179,8 +180,8 @@ router.get("/get-contacts/:id", (req, res) => {
   connection.query(
     `SELECT contacts.name,contacts.email,contacts.user_affiliate,contacts.id
      FROM client INNER JOIN contacts ON client.id = contacts.user_affiliate WHERE client.id = ${connection.escape(
-       x
-     )} `,
+      x
+    )} `,
     (err, results, fields) => {
       if (err) throw err;
       console.log(results);

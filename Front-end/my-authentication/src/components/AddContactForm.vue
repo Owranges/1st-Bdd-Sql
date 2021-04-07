@@ -44,7 +44,7 @@
       type="submit"
       variant="primary"
       :disabled="submitStatus === 'PENDING'"
-      >Sign-Up</b-button
+      >Add-Contact</b-button
     >
 
     <p v-if="this.notFull == ''"></p>

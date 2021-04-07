@@ -47,6 +47,7 @@
         placeholder="Enter your secret password"
         required
         v-on:keyup="keymonitor"
+        type="password"
       ></b-form-input>
       <div class="error" v-if="!$v.password.required">password is required</div>
       <div class="error" v-if="!$v.password.minLength">

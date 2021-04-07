@@ -23,6 +23,7 @@
         placeholder="Enter your secret password"
         required
         v-on:keyup="keymonitor"
+        type="password"
       ></b-form-input>
     </b-form-group>
     <b-button type="submit" variant="primary" @click="checkUser"
@@ -59,7 +60,7 @@ export default {
     //   this.form.password = ''
     //   // Trick to reset/clear native browser form validation state
     // },
-    keymonitor: function(event) {
+    keymonitor: function (event) {
       console.log(event.key);
 
       if (event.key == "Enter") {

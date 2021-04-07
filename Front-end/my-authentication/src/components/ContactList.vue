@@ -1,13 +1,16 @@
 <template>
   <div>
-    <p>ContactList</p>
     <ul>
-      <li v-for="contact in Contactes" v-bind:key="contact.email">
-        name:{{ contact.name }} <br />
-        email:{{ contact.email }}
+      <li
+        class="li-contact"
+        v-for="contact in Contactes"
+        v-bind:key="contact.email"
+      >
+        <p class="name-contact">{{ contact.name }}</p>
+
+        <p class="email-contact">{{ contact.email }}</p>
       </li>
     </ul>
-    <button>Add</button>
   </div>
 </template>
 
@@ -57,3 +60,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.li-contact {
+  list-style: none;
+}
+.name-contact {
+  font-weight: bold;
+}
+.email-contact {
+  font-style: italic;
+}
+</style>
