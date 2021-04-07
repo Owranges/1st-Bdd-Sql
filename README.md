@@ -1,5 +1,5 @@
-# 1st-Bdd-Sql
-Project Name : my-authetification-platform
+# MySQL VUE AUTHENTIFICATION PLATFORM
+Project Name : my-authentification-platform
 
     My first system of authentification
 
